@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lab
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ghost-pod
+  namespace: lab
+spec:
+  containers:
+  - name: ghost
+    image: ghost:5-alpine
+    ports:
+    - containerPort: 2368
+    env:
+    - name: database__client
+      value: sqlite3
+    - name: database__connection__filename
+      value: /var/lib/ghost/content/data/ghost.db
