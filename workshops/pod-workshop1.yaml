@@ -15,7 +15,6 @@ spec:
   - name: init-mkdir
     image: busybox
     command: ['sh', '-c', 'mkdir -p /var/lib/ghost/content/data']
-    volumeMounts:
   containers:
   - name: ghost
     image: ghost:5-alpine
