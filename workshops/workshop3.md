@@ -188,12 +188,18 @@ spec:
             operator: In
             values: ["linux"]
       preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
+      - weight: 70
         preference:
           matchExpressions:
           - key: disktype
             operator: In
             values: ["ssd"]
+        - weight: 30
+        preference:
+            matchExpressions:
+            - key: environment
+                operator: In
+                values: ["production"]
   containers:
   - name: app
     image: nginx:1.21
