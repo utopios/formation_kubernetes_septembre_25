@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql-db
+  labels:
+    app: mysql
+spec:
+  containers:
+  - name: mysql
+    image: mysql:8.0
+    ports:
+    - containerPort: 3306
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: "motdepasse123"
+    - name: MYSQL_DATABASE
+      value: "wordpress"
+    - name: MYSQL_USER
+      value: "wpuser"
+    - name: MYSQL_PASSWORD
+      value: "wppass"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: mysql
+  ports:
+  - port: 3306
+    targetPort: 3306
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wordpress-site
+  labels:
+    app: wordpress
+spec:
+  containers:
+  - name: wordpress
+    image: wordpress:latest
+    ports:
+    - containerPort: 80
+    env:
+    - name: WORDPRESS_DB_HOST
+      value: "mysql-service:3306"
+    - name: WORDPRESS_DB_NAME
+      value: "wordpress"
+    - name: WORDPRESS_DB_USER
+      value: "wpuser"
+    - name: WORDPRESS_DB_PASSWORD
+      value: "wppass"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-service
+spec:
+  selector:
+    app: wordpress
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer
