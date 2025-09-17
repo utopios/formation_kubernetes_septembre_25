@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: config-pod
+spec:
+  containers:
+  - name: app
+    image: nginx
+    volumeMounts:
+    - name: config-volume
+      mountPath: /etc/config
+    - name: nginx-config
+      mountPath: /etc/nginx/conf.d
+    env:
+      - name: DB_HOST
+        valueFrom:
+          configMapKeyRef:
+            name: app-config
+            key: database.properties
+  
+  volumes:
+  - name: config-volume
+    configMap:
+      name: app-config
+  - name: nginx-config
+    configMap:
+      name: app-config
+      items:
+      - key: nginx.conf
+        path: default.conf
