@@ -342,7 +342,7 @@ data:
   password: cGFzc3dvcmQxMjM= # password123 en base64
   config.properties: |
     ZGJfdXJsPWpkYmM6bXlzcWw6Ly9teXNxbC1zZXJ2aWNlOjMzMDYvdGVzdGRiCmRiX3VzZXI9YWRtaW4KZGJ fcGFzc3dvcmQ9cGFzc3dvcmQxMjM=
-    # Contenu en base64 : db_url=jdbc:mysql://mysql-service:3306/testdb\ndb_user=admin\ndb_password=password123
+  # Contenu en base64 : db_url=jdbc:mysql://mysql-service:3306/testdb\ndb_user=admin\ndb_password=password123
 ```
 
 ### 6.2 Pod utilisant le Secret
