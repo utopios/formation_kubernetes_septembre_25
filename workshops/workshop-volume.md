@@ -387,7 +387,9 @@ kubectl apply -f app-with-secret.yaml
 # Vérifier que les secrets sont montés
 kubectl exec -it app-with-secret -- ls -la /etc/secrets/
 kubectl exec -it app-with-secret -- cat /etc/secrets/username
-kubectl exec -it app-with-secret -- echo $DB_USER
+kubectl exec -it app-with-secret -- sh
+echo $DB_USER
+# kubectl exec -it app-with-secret -- echo $DB_USER
 ```
 
 ---

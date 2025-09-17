@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  nginx.conf: |
+    server {
+        listen 80;
+        server_name localhost;
+        
+        location / {
+            root /usr/share/nginx/html;
+            index index.html;
+        }
+        
+        location /api {
+            return 200 "API endpoint working!\n";
+            add_header Content-Type text/plain;
+        }
+    }
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head><title>Configuration depuis ConfigMap</title></head>
+    <body>
+        <h1>Nginx configuré avec ConfigMap</h1>
+        <p>Cette page est servie par une configuration dans un ConfigMap</p>
+        <a href="/api">Tester l'API</a>
+    </body>
+    </html>
