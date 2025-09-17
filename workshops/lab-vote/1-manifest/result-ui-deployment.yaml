@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: result-ui
+  name: result-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: result-ui
+  template:
+    metadata:
+      labels:
+        app: result-ui
+    spec:
+      containers:
+        - image: mohamed1780/result-ui:v1
+          name: result-ui
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: result-ui

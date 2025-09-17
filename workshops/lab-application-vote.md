@@ -94,7 +94,7 @@ Déployez cette application complète sur votre cluster GKE en créant :
 - Pas besoin de service (le worker ne reçoit pas de requêtes)
 
 ### Étape 7 : API Result
-- Déployer avec l'image `mohamed1780/result`
+- Déployer avec l'image `mohamed1780/result:v1`
 - Exposer sur le port 80
 - Créer un service ClusterIP nommé `result`
 
