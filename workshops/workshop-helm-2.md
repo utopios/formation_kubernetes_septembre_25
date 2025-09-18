@@ -343,7 +343,7 @@ Points d’attention :
 ## Étape 8 — Déploiement en dev
 
 ```bash
-helm upgrade --install ghost-dev . -n ghost -f values.yaml -f values-dev.yaml
+helm upgrade --install ghost-dev . -n ghost --create-namespace -f values.yaml -f values-dev.yaml
 
 kubectl get pods -n ghost
 kubectl get svc -n ghost
