@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vets
+  labels:
+    app: petclinic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: petclinic
+      tier: vets
+  template:
+    metadata:
+      labels:
+        app: petclinic
+        tier: vets
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8083"
+    spec:
+      containers:
+        - name: app
+          image: alexandreroman/spring-petclinic-k8s-vets:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: 1Gi
+            limits:
+              memory: 1Gi
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://pdb-mysql:3306/petclinic"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "petclinic"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "changeme"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "mysql"
+            - name: SERVER_PORT
+              value: "8083"
+          ports:
+            - name: http
+              containerPort: 8083      

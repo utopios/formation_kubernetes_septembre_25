@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  labels:
+    app: petclinic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: petclinic
+      tier: api-gateway
+  template:
+    metadata:
+      labels:
+        app: petclinic
+        tier: api-gateway
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+        - name: app
+          image: alexandreroman/spring-petclinic-k8s-api-gateway:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: 1Gi
+            limits:
+              memory: 1Gi
+          env:
+            - name: APP_CUSTOMERS_URI
+              value: "http://customers:8082"
+            - name: APP_VETS_URI
+              value: "http://vets:8083"
+            - name: APP_VISITS_URI
+              value: "http://visits:8084"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "mysql"
+            - name: SERVER_PORT
+              value: "8080"
+          ports:
+            - name: http
+              containerPort: 8080
