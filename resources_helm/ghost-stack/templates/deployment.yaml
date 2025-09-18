@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ghost-stack.fullname" . }}-ghost
+  labels:
+    {{- include "ghost-stack.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "ghost-stack.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      tier: ghost
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "ghost-stack.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        tier: ghost
+    spec:
+      containers:
+        - name: ghost
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 2368
+          env:
+            - name: url
+              value: "{{ .Values.ghost.urlProtocol }}://{{ default "localhost" .Values.ghost.host }}"
+            - name: database__client
+              value: "mysql"
+            - name: database__connection__host
+              value: "{{ include "ghost-stack.fullname" . }}-mysql"
+            - name: database__connection__user
+              value: {{ .Values.mysql.auth.username | quote }}
+            - name: database__password
+              value: {{ .Values.mysql.auth.password | quote }}
+            - name: database__connection__database
+              value: {{ .Values.mysql.auth.database | quote }}
+            - name: GHOST_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ghost-stack.fullname" . }}-ghost
+                  key: GHOST_USERNAME
+            - name: GHOST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ghost-stack.fullname" . }}-ghost
+                  key: GHOST_PASSWORD
+            - name: GHOST_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ghost-stack.fullname" . }}-ghost
+                  key: GHOST_EMAIL
+          volumeMounts:
+            - name: ghost-content
+              mountPath: /bitnami/ghost
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: ghost-content
+          persistentVolumeClaim:
+            claimName: {{ include "ghost-stack.fullname" . }}-ghost-pvc

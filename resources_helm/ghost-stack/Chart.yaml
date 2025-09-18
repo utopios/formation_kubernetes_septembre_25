@@ -1,0 +1,11 @@
+apiVersion: v2
+name: ghost-stack
+description: Ghost CMS on GKE with MySQL dependency (no ingress)
+type: application
+version: 0.1.0
+appVersion: "5.x"
+dependencies:
+  - name: mysql
+    version: 14.0.3
+    repository: https://charts.bitnami.com/bitnami
+    alias: mysql
