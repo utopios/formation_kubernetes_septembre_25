@@ -1,0 +1,51 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: vote-role
+  namespace: vote
+rules:
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: vote-binding
+  namespace: vote
+subjects:
+- kind: ServiceAccount
+  name: vote-sa
+  namespace: vote
+roleRef:
+  kind: Role
+  name: vote-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: result-role
+  namespace: vote
+rules:
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: result-binding
+  namespace: vote
+subjects:
+- kind: ServiceAccount
+  name: result-sa
+  namespace: vote
+roleRef:
+  kind: Role
+  name: result-role
+  apiGroup: rbac.authorization.k8s.io
